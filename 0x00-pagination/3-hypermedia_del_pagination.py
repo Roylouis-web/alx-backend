@@ -56,11 +56,14 @@ class Server:
             an index in a database
         """
 
+        if index is None:
+            index = 0
+
         assert index in range(0, len(self.dataset()))
 
-        dataset = []
-        keys = []
-        count = 0
+        dataset: List[List] = []
+        keys: List[int] = []
+        count: int = 0
 
         for key in self.indexed_dataset().keys():
             if key >= index:
