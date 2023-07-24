@@ -59,8 +59,8 @@ class Server:
         if index is None:
             index = 0
 
-        #assert index in range(0, len(self.indexed_dataset()))
-        #assert type(page_size) == int and page_size > 0
+        assert index in range(0, len(self.indexed_dataset()))
+        assert type(page_size) == int and page_size > 0
 
         dataset: List[List] = []
         k: List[int] = []
