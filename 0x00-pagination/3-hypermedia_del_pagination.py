@@ -63,10 +63,12 @@ class Server:
         assert type(page_size) == int and page_size > 0
 
         dataset: List[List] = []
+        ids = self.indexed_dataset()
         k: List[int] = []
         count: int = 0
         data: List[List] = []
         result: Dict = {}
+        indexes: List = [key for key in ids.keys()]
 
         for key in self.indexed_dataset().keys():
             if key >= index:
@@ -76,7 +78,7 @@ class Server:
                 k.append(key)
                 count += 1
 
-        if len(dataset) == page_size + 1:
+        if len(dataset) == page_size + 1 and page_size > 1:
             data = dataset[:-1]
             result.update({
                 'index': index,
@@ -85,12 +87,18 @@ class Server:
                 'next_index': k[-1]
             })
         else:
-            data = dataset
-            result.update({
-                'index': index,
-                'data': data,
-                'page_size': page_size,
-                'next_page': None
-            })
-
+            if index == indexes[-1] or page_size == 1:
+                result.update({
+                    'index': index,
+                    'data': dataset[0],
+                    'page_size': page_size,
+                    'next_page': None
+                })
+            else:
+                result.update({
+                    'index': index,
+                    'data': dataset[:-1],
+                    'page_size': page_size,
+                    'next_page': None
+                })
         return result
