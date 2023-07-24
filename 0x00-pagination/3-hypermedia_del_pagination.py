@@ -60,7 +60,8 @@ class Server:
             index = 0
 
         assert index in range(0, len(self.dataset()))
-        assert type(index) == int and type(page_size) == int
+        assert type(index) == int
+        assert type(page_size) == int and page_size > 0
 
         dataset: List[List] = []
         k: List[int] = []
