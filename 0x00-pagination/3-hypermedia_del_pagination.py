@@ -89,6 +89,7 @@ class Server:
                 'index': index,
                 'data': data,
                 'page_size': page_size,
+                'next_page': None
             })
 
         return result
