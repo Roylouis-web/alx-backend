@@ -58,7 +58,7 @@ class Server:
 
         if index is None:
             index = 0
-
+        assert type(index) == int
         assert index in range(0, len(self.dataset()))
         assert type(page_size) == int and page_size > 0
 
@@ -75,6 +75,7 @@ class Server:
                 dataset.append(self.indexed_dataset()[key])
                 k.append(key)
                 count += 1
+
         if len(dataset) == page_size + 1:
             data = dataset[:-1]
             result.update({
