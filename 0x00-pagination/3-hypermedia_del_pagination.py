@@ -56,10 +56,7 @@ class Server:
             an index in a database
         """
 
-        if index is None:
-            index = 0
-        assert type(index) == int
-        assert index in range(0, len(self.dataset()))
+        assert index is None or index in range(0, len(self.dataset()))
         assert type(page_size) == int and page_size > 0
 
         dataset: List[List] = []
@@ -69,9 +66,13 @@ class Server:
         data: List[List] = []
         result: Dict = {}
         indexes: List = [key for key in ids.keys()]
+        temp_index: Union[None, int] = index
+
+        if index is None:
+            temp_index = 0
 
         for key in self.indexed_dataset().keys():
-            if key >= index:
+            if key >= temp_index:
                 if count == page_size + 1:
                     break
                 dataset.append(self.indexed_dataset()[key])
@@ -79,13 +80,22 @@ class Server:
                 count += 1
 
         if len(dataset) == page_size + 1 and page_size > 1:
-            data = dataset[:-1]
-            result.update({
-                'index': index,
-                'data': data,
-                'page_size': page_size,
-                'next_index': k[-1]
-            })
+            if index is None:
+                data = dataset[:-1]
+                result.update({
+                    'index': None,
+                    'data': data,
+                    'page_size': page_size,
+                    'next_index': k[-1]
+                })
+            else:
+                data = dataset[:-1]
+                result.update({
+                    'index': index,
+                    'data': data,
+                    'page_size': page_size,
+                    'next_index': k[-1]
+                })
         else:
             if index == indexes[-1] or page_size == 1:
                 result.update({
