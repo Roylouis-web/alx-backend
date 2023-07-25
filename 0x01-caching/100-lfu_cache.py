@@ -45,7 +45,7 @@ class LFUCache(BaseCaching):
                     if v["count"] > count:
                         count = v["count"]
 
-                for k, v in sorted(timestamp.items()):
+                for k, v in timestamp.items():
                     if v["count"] < count:
                         count = v["count"]
                         found_key = k
