@@ -36,7 +36,6 @@ class LFUCache(BaseCaching):
             cached_data = self.cache_data
             timestamp = self.timestamp
             cached_data.update({key: item})
-            timestamp.update({key: {"count": 1}})
 
             if len(cached_data) > self.MAX_ITEMS:
                 count = 0
@@ -46,7 +45,7 @@ class LFUCache(BaseCaching):
                     if v["count"] > count:
                         count = v["count"]
 
-                for k, v in timestamp.items():
+                for k, v in sorted(timestamp.items()):
                     if v["count"] < count:
                         count = v["count"]
                         found_key = k
@@ -54,6 +53,11 @@ class LFUCache(BaseCaching):
                 del cached_data[found_key]
                 del timestamp[found_key]
                 print(f"DISCARD: {found_key}")
+
+            if timestamp.get(key):
+                timestamp[key]["count"] += 1
+            else:
+                timestamp.update({key: {"count": 1}})
 
     def get(self, key):
         """
