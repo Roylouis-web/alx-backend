@@ -42,6 +42,6 @@ class FIFOCache(BaseCaching):
             linked to key
         """
 
-        if key and self.cache_data[key]:
+        if key and self.cache_data.get(key):
             return self.cache_data[key]
         return None

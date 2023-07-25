@@ -34,8 +34,8 @@ class LIFOCache(BaseCaching):
             keys = [k for k in cached_data]
 
             if len(keys) > self.MAX_ITEMS:
-                del cached_data[keys[-1]]
-                print(f"DISCARD: {keys[-1]}")
+                del cached_data[keys[-2]]
+                print(f"DISCARD: {keys[-2]}")
 
     def get(self, key):
         """
@@ -43,6 +43,6 @@ class LIFOCache(BaseCaching):
             self.cache_dat
         """
 
-        if key and self.cache_data[key]:
+        if key and self.cache_data.get(key):
             return self.cache_data[key]
         return None
