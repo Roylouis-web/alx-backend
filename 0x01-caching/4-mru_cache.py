@@ -38,21 +38,17 @@ class MRUCache(BaseCaching):
             cached_data.update({key: item})
 
             if len(cached_data) > self.MAX_ITEMS:
-                time = None
-                found_key = None
-                count = 0
-
-                for k, v in timestamp.items():
-                    if count == 0:
-                        time = v["time"]
-                    if v["time"] > time:
-                        time = v["time"]
-                        found_key = k
-                    count += 1
-
-                del cached_data[found_key]
-                del timestamp[found_key]
-                print(f"DISCARD: {found_key}")
+                time_list = [
+                        v["time"] for v in timestamp.values()
+                ]
+                time = max(time_list)
+                found_key = [
+                        k for k, v in timestamp.items()
+                        if v["time"] == time
+                ]
+                del cached_data[found_key[0]]
+                del timestamp[found_key[0]]
+                print(f"DISCARD: {found_key[0]}")
 
             timestamp.update({key: {"time": datetime.now()}})
 
